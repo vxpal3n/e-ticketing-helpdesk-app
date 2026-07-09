@@ -10,10 +10,11 @@ class AdminManageUsersPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final adminState = ref.watch(adminProvider);
+    final textColor = Theme.of(context).colorScheme.onSurface;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manajemen Pengguna', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+        title: Text('Kelola Pengguna', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
       ),
       body: RefreshIndicator(
         onRefresh: () async => ref.invalidate(adminProvider),
@@ -43,12 +44,12 @@ class AdminManageUsersPage extends ConsumerWidget {
                       backgroundColor: user.isActive ? AppColors.primary.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
                       child: Icon(Icons.person, color: user.isActive ? AppColors.primary : Colors.grey),
                     ),
-                    title: Text(user.name, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                    title: Text(user.name, style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: textColor)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(user.email, style: GoogleFonts.inter(fontSize: 12)),
-                        const SizedBox(height: 4),
+                        Text(user.email, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey.shade600)),
+                        const SizedBox(height: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
@@ -69,7 +70,10 @@ class AdminManageUsersPage extends ConsumerWidget {
                         final success = await ref.read(adminProvider.notifier).toggleUserStatus(user.id);
                         if (!success && context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Gagal mengubah status. Tidak bisa menonaktifkan akun sendiri!')),
+                            const SnackBar(
+                              content: Text('Gagal mengubah status. Anda tidak bisa menonaktifkan akun sendiri!'),
+                              backgroundColor: AppColors.error,
+                            ),
                           );
                         }
                       },

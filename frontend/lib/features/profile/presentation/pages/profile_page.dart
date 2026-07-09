@@ -5,6 +5,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../auth/presentation/pages/login_page.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../admin/presentation/pages/admin_manage_users_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -153,6 +154,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16),
         children: [
+
+        // --- MENU KHUSUS ADMIN ---
+          if (role == 'admin') ...[
+            _buildSectionHeader('ADMINISTRATION'),
+            _buildListTile(
+              Icons.admin_panel_settings_outlined, 
+              'Kelola Pengguna', 
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminManageUsersPage()));
+              }
+            ),
+          ],
+          
         // --- 1. ACCOUNT ---
         _buildSectionHeader('ACCOUNT'),
           Padding(
@@ -217,6 +231,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
           _buildListTile(Icons.lock_outline, 'Change Password', onTap: _showChangePasswordDialog),
           const SizedBox(height: 24),
+          
 
           // --- 2. APPEARANCE ---
           _buildSectionHeader('APPEARANCE'),
